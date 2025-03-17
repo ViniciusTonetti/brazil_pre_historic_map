@@ -62,7 +62,7 @@ mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09
 
 unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
-values(IBGE_wgs84) %>% 
+values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
   mutate(DSC_VEG_PR = case_when(
     DSC_VEG_PR == "Estepe" ~ "grasslands",
     DSC_VEG_PR == "Floresta Estacional Semidecidual" ~ "forest",
@@ -83,9 +83,65 @@ values(IBGE_wgs84) %>%
     DSC_VEG_PR == "Floresta  OmbrÃ³fila/Floresta Estacional" ~ "forest",
     DSC_VEG_PR == "Floresta Estacional/Floresta OmbrÃ³fila Mista" ~ "forest",
     DSC_VEG_PR == "Savana/Savana EstÃ©pica/Floresta Estacional" ~ "transition",
-    TRUE ~ DSC_VEG_PR
-  ))
+    TRUE ~ DSC_VEG_PR)) %>% 
+  mutate(DSC_VEG_PR = ifelse(is.na(DSC_VEG_PR), DSC_CLASS_, DSC_VEG_PR))
 
+unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
+
+values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
+  mutate(DSC_VEG_PR = case_when(
+    DSC_VEG_PR == "Massa Dagua Continental" ~ "water",
+    DSC_VEG_PR == "Savana-EstÃ©pica Parque" ~ "savana",
+    DSC_VEG_PR == "Estepe Gramineo-Lenhosa" ~ "grasslands",
+    DSC_VEG_PR == "Massa Dagua Costeira - Mar Territorial, 12 milhas" ~ "water",
+    DSC_VEG_PR == "Massa Dagua Costeira - Zona Contigua, 24 milhas"  ~ "water",
+    DSC_VEG_PR == "Massa Dagua Costeira - Zona EconÃ´mica Exclusiva, 200 milhas"   ~ "water",
+    DSC_VEG_PR == "Ã\u0081reas das FormaÃ§Ãµes Pioneiras VegetaÃ§Ã£o com InfluÃªncia Marinha" ~ "forest",
+    DSC_VEG_PR == "Estepe Arborizada" ~ "grasslands",
+    DSC_VEG_PR == "Estepe Parque" ~ "grasslands",
+    DSC_VEG_PR == "Estepe/Floresta Estacional" ~ "transition",
+    DSC_VEG_PR == "Floresta Estacional Semidecidual Submontana" ~ "forest",
+    DSC_VEG_PR == "Floresta OmbrÃ³fila Mista Montana" ~ "forest",
+    DSC_VEG_PR == "Floresta Estacional Semidecidual Montana" ~ "forest",
+    DSC_VEG_PR == "Floresta OmbrÃ³fila Densa Submontana" ~ "forest",
+    DSC_VEG_PR == "Floresta OmbrÃ³fila Mista Alto-Montana" ~ "forest",
+    DSC_VEG_PR == "Floresta OmbrÃ³fila Densa Montana" ~ "forest",
+    DSC_VEG_PR == "Savana/Savana EstÃ©pica" ~ "savana",
+    DSC_VEG_PR == "Savana Arborizada" ~ "savana",
+    DSC_VEG_PR == "Savana EstÃ©pica/Floresta Estacional" ~ "transition",
+    DSC_VEG_PR == "Savana-EstÃ©pica Arborizada" ~ "savana",
+    DSC_VEG_PR == "Savana-EstÃ©pica Gramineo-Lenhosa" ~ "savana",
+    DSC_VEG_PR == "Floresta Estacional Decidual Terras Baixas" ~ "forest",
+    DSC_VEG_PR == "Savana-EstÃ©pica Florestada" ~ "savana",
+    DSC_VEG_PR == "Savana Parque" ~ "savana",
+    DSC_VEG_PR == "Savana Florestada" ~ "savana",
+    DSC_VEG_PR == "Savana/ Floresta Estacional" ~ "transition",
+    DSC_VEG_PR == "Floresta Estacional Decidual Submontana" ~ "forest",
+    DSC_VEG_PR == "Savana Gramineo-Lenhosa" ~ "savana",
+    DSC_VEG_PR == "Floresta Estacional Semidecidual Aluvial" ~ "forest",
+    DSC_VEG_PR == "Ã\u0081reas das FormaÃ§Ãµes Pioneiras VegetaÃ§Ã£o com InfluÃªncia Fluvial e/ou Lacustre" ~ "forest",
+    DSC_VEG_PR == "VegetaÃ§Ã£o OmbrÃ³fila Aberta Aluvial" ~ "forest",
+    DSC_VEG_PR == "Campinarana Florestada" ~ "forest",
+    DSC_VEG_PR == "Campinarana Gramineo-Lenhosa" ~ "savana",
+    DSC_VEG_PR == "VegetaÃ§Ã£o OmbrÃ³fila Aberta Submontana" ~ "forest",
+    DSC_VEG_PR == "Savana/Floresta OmbrÃ³fila" ~ "transition",
+    DSC_VEG_PR == "Campinarana/Floresta OmbrÃ³fila" ~ "transition",
+    DSC_VEG_PR == "Campinarana Arborizada" ~ "forest",
+    DSC_VEG_PR == "RefÃºgios Vegetacionais Montano" ~ "grasslands",
+    DSC_VEG_PR == "Campinarana Arbustiva" ~ "forest",
+    DSC_VEG_PR == "RefÃºgios Vegetacionais Alto-Montano" ~ "grasslands",
+    DSC_VEG_PR == "Floresta  OmbrÃ³fila/Floresta Estacional" ~ "forest",
+    DSC_VEG_PR == "Floresta Estacional Semidecidual Terras Baixas" ~ "forest",
+    DSC_VEG_PR == "Ã\u0081reas das FormaÃ§Ãµes Pioneiras VegetaÃ§Ã£o com InfluÃªncia Fluvio- marinha" ~ "forest",
+    DSC_VEG_PR == "Floresta OmbrÃ³fila Densa/Floresta OmbrÃ³fila Mista" ~ "forest",
+    DSC_VEG_PR == "Floresta Estacional Decidual Montana" ~ "forest",
+    DSC_VEG_PR == "Afloramento Rochoso" ~ "rock",
+    DSC_VEG_PR == "Savana/Savana EstÃ©pica/Floresta Estacional" ~ "transition",
+    DSC_VEG_PR == "Savana/FormaÃ§Ãµes Pioneiras" ~ "savana",
+    DSC_VEG_PR == "Floresta Estacional/FormaÃ§Ãµes Pioneiras" ~ "savana",
+    TRUE ~ DSC_VEG_PR))
+
+unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
 IBGE_rasterized <- terra::rasterize(IBG_wgs84, mb_1985, field = )
 
