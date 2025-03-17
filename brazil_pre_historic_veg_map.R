@@ -53,12 +53,6 @@ crs(IBGE) <- "EPSG:4326"
 
 IBGE_wgs84 <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_WGS84.shp")
 
-unique(IBGE_wgs84[,])
-
-
-# Rasterizing to the same resolution of MapBiomas
-
-mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
 
 unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
@@ -86,6 +80,7 @@ values(IBGE_wgs84) <- values(IBGE_wgs84) %>%
     TRUE ~ DSC_VEG_PR)) %>% 
   mutate(DSC_VEG_PR = ifelse(is.na(DSC_VEG_PR), DSC_CLASS_, DSC_VEG_PR))
 
+# Checking unique values
 unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
 values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
@@ -139,11 +134,19 @@ values(IBGE_wgs84) <- values(IBGE_wgs84) %>%
     DSC_VEG_PR == "Savana/Savana EstÃ©pica/Floresta Estacional" ~ "transition",
     DSC_VEG_PR == "Savana/FormaÃ§Ãµes Pioneiras" ~ "savana",
     DSC_VEG_PR == "Floresta Estacional/FormaÃ§Ãµes Pioneiras" ~ "savana",
+    DSC_VEG_PR == "Floresta OmbrÃ³fila Densa Terras Baixas" ~ "forest",
+    DSC_VEG_PR == "VegetaÃ§Ã£o OmbrÃ³fila Aberta Terras Baixas" ~ "forest",
+    DSC_VEG_PR == "Floresta OmbrÃ³fila Densa Aluvial" ~ "forest",
     TRUE ~ DSC_VEG_PR))
 
+# Checking unique values
 unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
-IBGE_rasterized <- terra::rasterize(IBG_wgs84, mb_1985, field = )
+# Rasterizing to the same resolution of MapBiomas
+
+mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
+
+IBGE_rasterized <- terra::rasterize(IBGE_wgs84, mb_1985, field = "DSC_VEG_PR")
 
 
 
