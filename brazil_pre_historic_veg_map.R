@@ -142,12 +142,39 @@ values(IBGE_wgs84) <- values(IBGE_wgs84) %>%
 # Checking unique values
 unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
+# IUCN codes for these forest cover types:
+
+# Forest      - 100
+# Savana      - 200
+# Grasslands  - 400
+# Transition  - 999
+# Rock        - 1700
+# Water       - 1700
+# (not wetlands)
+
+
+values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
+  mutate(DSC_VEG_PR = case_when(
+    DSC_VEG_PR == "forest" ~ "100",
+    DSC_VEG_PR == "savana" ~ "200",
+    DSC_VEG_PR == "grasslands" ~ "400",
+    DSC_VEG_PR == "transition" ~ "999",
+    DSC_VEG_PR == "rock" ~ "1700",
+    DSC_VEG_PR == "water" ~ "1700",
+    TRUE ~ DSC_VEG_PR)) %>% 
+  mutate(DSC_VEG_PR = ifelse(is.na(DSC_VEG_PR), DSC_CLASS_, DSC_VEG_PR))
+
+# Checking unique values
+unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
+
+
 # Rasterizing to the same resolution of MapBiomas
 
 mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
 
 IBGE_rasterized <- terra::rasterize(IBGE_wgs84, mb_1985, field = "DSC_VEG_PR")
 
-
+writeRaster(IBGE_rasterized, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized.tif",
+            gdal=c("COMPRESS=DEFLATE", "TFW=YES"))
 
 
