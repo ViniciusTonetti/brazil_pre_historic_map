@@ -52,6 +52,7 @@ crs(IBGE) <- "EPSG:4326"
 #writeVector(IBGE, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_WGS84.shp")
 
 IBGE_wgs84 <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_WGS84.shp")
+br <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_wgs84.shp")
 
 
 unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
@@ -73,7 +74,7 @@ values(IBGE_wgs84) <- values(IBGE_wgs84) %>%
     DSC_VEG_PR == "Floresta OmbrÃ³fila Mista" ~ "forest",
     DSC_VEG_PR == "Estepe/Floresta OmbrÃ³fila Mista" ~ "transition",
     DSC_VEG_PR == "Savana/ Floresta Estacional" ~ "transition",
-    DSC_VEG_PR == "VegetaÃ§Ã£o OmbrÃ³fila Aberta" ~ "transition",
+    DSC_VEG_PR == "VegetaÃ§Ã£o OmbrÃ³fila Aberta" ~ "forest",
     DSC_VEG_PR == "Floresta  OmbrÃ³fila/Floresta Estacional" ~ "forest",
     DSC_VEG_PR == "Floresta Estacional/Floresta OmbrÃ³fila Mista" ~ "forest",
     DSC_VEG_PR == "Savana/Savana EstÃ©pica/Floresta Estacional" ~ "transition",
@@ -172,9 +173,15 @@ unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
 mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
 
+
 IBGE_rasterized <- terra::rasterize(IBGE_wgs84, mb_1985, field = "DSC_VEG_PR")
 
-writeRaster(IBGE_rasterized, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized.tif",
-            gdal=c("COMPRESS=DEFLATE", "TFW=YES"))
+IBGE_rasterized <- mask(crop(IBGE_rasterized , br), br)
+
+plot(IBGE_rasterized)
+
+#writeRaster(IBGE_rasterized, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized.tif",
+#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"))
+
 
 
