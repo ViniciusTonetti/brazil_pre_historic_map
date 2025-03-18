@@ -228,7 +228,8 @@ IBGE_rasterized_grass_wet <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_
 
 jung_br_30m <- terra::resample(jung_br, mb_1985_cropBR, method = "near") # re-sampling by the nearest pixel
 
-
+#terra::writeRaster(jung_br_30m, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/jung_br_30m.tif",
+#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
 
 
 
