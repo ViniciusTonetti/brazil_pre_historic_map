@@ -232,4 +232,62 @@ jung_br_30m <- terra::resample(jung_br, mb_1985_cropBR, method = "near") # re-sa
 #            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
 
 
+# Adding Jung values in IBGE
+# ------------------------------------------------------------------------------
+
+# Cleaning directory 
+
+rm(list = ls())
+
+
+# Loading layers
+
+jung_br30m <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/jung_br_30m.tif")
+IBGE_rasterized_grass_wet <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized_grass_wet.tif")
+
+historic_BR <- terra::ifel(IBGE_rasterized_grass_wet == 999, jung_br30m, IBGE_rasterized_grass_wet)
+
+#terra::writeRaster(historic_BR, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/historic_BR.tif",
+#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+
+
+# Reclassifying pixel values as Jung has different categories for each land cover type
+# This classification was made mainly by checking pixel values against Google maps images in QGis
+
+reclass_matrix <- matrix(c(0, 100,
+                           104, 100,
+                           105, 100,
+                           106, 100,
+                           107, 100,
+                           108, 100,
+                           109, 100,
+                           201, 200,
+                           202, 200,
+                           300, 100,
+                           304, 100,
+                           305, 100,
+                           306, 100,
+                           307, 100,
+                           404, 400,
+                           405, 400,
+                           406, 400,
+                           407, 400,
+                           502, 500,
+                           503, 500,
+                           505, 500,
+                           506, 500,
+                           507, 500,
+                           513, 500,
+                           802, 100,
+                           1401, 100,
+                           1402, 100,
+                           1403, 100,
+                           1405, 100),
+                         ncol = 2, byrow = T)
+
+historic_BR_final_values <- terra::classify(historic_BR, reclass_matrix)
+
+#terra::writeRaster(historic_BR_final_values, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/historic_BR_final_values.tif",
+#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+
 
