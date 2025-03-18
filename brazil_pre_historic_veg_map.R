@@ -1,5 +1,5 @@
 # Builfding a prehistoric vegetation map for Brazil
-# Vinicius Tonetti - vrtonetti@ufscar.br / vrtonetti@gmail.com
+# Vinicius Tonetti - vrtonetti@gmail.com
 
 # Loading packages
 
