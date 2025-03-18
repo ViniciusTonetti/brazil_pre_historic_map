@@ -195,8 +195,12 @@ IBGE_raster <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBG
 mb_1985_cropBR <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
 
 
-# Considering all wetlands in MapBiomas 1985 (code 11) as wetlands in IBGE (IUCN code 400)
-IBGE_raster[which(mb_1985_cropBR[] == 12)] <- 400
+# Considering all grasslands in MapBiomas 1985 (code 12) as grasslands in IBGE (IUCN code 400)
+IBGE_raster[which(mb_1985_cropBR[] == 11)] <- 500
+
+
+# Considering all wetlands in MapBiomas 1985 (code 11) as wetlands in IBGE (IUCN code 500)
+IBGE_raster[which(mb_1985_cropBR[] == 11)] <- 500
 
 
 
