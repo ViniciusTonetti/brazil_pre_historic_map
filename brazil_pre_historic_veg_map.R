@@ -55,8 +55,6 @@ IBGE_wgs84 <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_W
 br <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_wgs84.shp")
 
 
-unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
-
 values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
   mutate(DSC_VEG_PR = case_when(
     DSC_VEG_PR == "Estepe" ~ "grasslands",
@@ -157,31 +155,29 @@ unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
   mutate(DSC_VEG_PR = case_when(
     DSC_VEG_PR == "forest" ~ "100",
-    DSC_VEG_PR == "savana" ~ "200",
     DSC_VEG_PR == "grasslands" ~ "400",
-    DSC_VEG_PR == "transition" ~ "999",
     DSC_VEG_PR == "rock" ~ "1700",
-    DSC_VEG_PR == "water" ~ "1700",
+    DSC_VEG_PR == "savana" ~ "200",
+    DSC_VEG_PR == "transition"  ~ "999",
+    DSC_VEG_PR == "water"  ~ "1700",
     TRUE ~ DSC_VEG_PR)) %>% 
-  mutate(DSC_VEG_PR = ifelse(is.na(DSC_VEG_PR), DSC_CLASS_, DSC_VEG_PR))
-
-# Checking unique values
-unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
+  mutate(DSC_VEG_PR = as.numeric(DSC_VEG_PR)) %>% 
+  rename(pixel_value = DSC_VEG_PR)
 
 
-# Rasterizing to the same resolution of MapBiomas
-
+# Loading MapBiomas 1985 to use the same resolution
 mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
 
 
-IBGE_rasterized <- terra::rasterize(IBGE_wgs84, mb_1985, field = "DSC_VEG_PR")
+# rasterizing IBGE
+IBGE_rasterized <- terra::rasterize(IBGE_wgs84, mb_1985, field = "pixel_value")
 
+# Cropping to Brazil polygon
 IBGE_rasterized <- mask(crop(IBGE_rasterized , br), br)
 
-plot(IBGE_rasterized)
 
 #writeRaster(IBGE_rasterized, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized.tif",
-#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"))
+#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
 
 
 
