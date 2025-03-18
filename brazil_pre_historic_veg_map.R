@@ -45,7 +45,7 @@ jung_br <- mask(crop(jung, br_wgs84), br_wgs84)
 rm(list = ls())
 
 
-# Setting CRS
+# Setting CRS to WGS84
 
 IBGE <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/Vegetacao_5000mil/Vegetacao_5000.shp")
 crs(IBGE) <- "EPSG:4326"
@@ -57,6 +57,8 @@ br <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_wgs84.
 
 
 # Reclassifying IBGE land cover types ------------------------------------------
+# Reclassification was made based on my knowledge of vegetation types, and also on visual inspection comparing with satellite images from Google in QGIS
+
 values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
   mutate(DSC_VEG_PR = case_when(
     DSC_VEG_PR == "Estepe" ~ "grasslands",
@@ -79,10 +81,12 @@ values(IBGE_wgs84) <- values(IBGE_wgs84) %>%
     DSC_VEG_PR == "Floresta Estacional/Floresta OmbrÃ³fila Mista" ~ "forest",
     DSC_VEG_PR == "Savana/Savana EstÃ©pica/Floresta Estacional" ~ "transition",
     TRUE ~ DSC_VEG_PR)) %>% 
-  mutate(DSC_VEG_PR = ifelse(is.na(DSC_VEG_PR), DSC_CLASS_, DSC_VEG_PR))
+  mutate(DSC_VEG_PR = ifelse(is.na(DSC_VEG_PR), DSC_CLASS_, DSC_VEG_PR)) # Some values have NA values in the column "DSC_VEG_PR" and the land cover information is in the column "DSC_CLASS_". For those, I considered information in the column "DSC_CLASS_" and reclassified again as below
 
 # Checking unique values
 unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
+
+# Reclassifying again for values that were previously NA and, thus, copied from the column "DSC_CLASS_"
 
 values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
   mutate(DSC_VEG_PR = case_when(
@@ -145,14 +149,16 @@ unique(values(IBGE_wgs84)[,"DSC_VEG_PR"])
 
 # IUCN codes for these forest cover types:
 
-# Forest      - 100
-# Savana      - 200
-# Grasslands  - 400
-# Transition  - 999
-# Rock        - 1700
-# Water       - 1700
-# (not wetlands)
+# Forest            - 100
+# Savana            - 200
+# Grasslands        - 400
+# Transition        - 999 # I arbitrarily choose these value as it will be filled with Jung values
+# Rock              - 1700
+# Water             - 1700 # (not wetlands)
+# Wetlands (inland) - 500
 
+
+# Replacing land cover types with IUCN codes
 
 values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
   mutate(DSC_VEG_PR = case_when(
@@ -180,6 +186,22 @@ IBGE_rasterized <- mask(crop(IBGE_rasterized , br), br)
 
 #writeRaster(IBGE_rasterized, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized.tif",
 #            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+
+
+# Considering values of natural land cover types from MapBiomas 1985 to the prehistoric map
+# ------------------------------------------------------------------------------
+
+IBGE_raster <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized.tif")
+mb_1985_cropBR <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
+
+
+# Considering all wetlands in MapBiomas 1985 (code 11) as wetlands in IBGE (IUCN code 400)
+IBGE_raster[which(mb_1985_cropBR[] == 12)] <- 400
+
+
+
+
+
 
 
 
