@@ -196,16 +196,37 @@ mb_1985_cropBR <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/
 
 
 # Considering all grasslands in MapBiomas 1985 (code 12) as grasslands in IBGE (IUCN code 400)
-IBGE_raster[which(mb_1985_cropBR[] == 11)] <- 500
+
+IBGE_rasterized_grass <- terra::ifel(mb_1985_cropBR == 12, 400, IBGE_raster)
 
 
-# Considering all wetlands in MapBiomas 1985 (code 11) as wetlands in IBGE (IUCN code 500)
-IBGE_raster[which(mb_1985_cropBR[] == 11)] <- 500
+# and considering all wetlands in MapBiomas 1985 (code 11) as wetlands in IBGE (IUCN code 500)
+
+IBGE_rasterized_grass_wet <- terra::ifel(mb_1985_cropBR == 11, 500, IBGE_rasterized_grass)
 
 
+#terra::writeRaster(IBGE_rasterized_grass_wet, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized_grass_wet.tif",
+#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
 
 
+# Considering Jung for transitional values for IBGE
+# ------------------------------------------------------------------------------
 
+# Cleaning directory 
+
+rm(list = ls())
+
+
+# Loading layers
+
+jung_br <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/jung_br.tif")
+mb_1985_cropBR <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
+IBGE_rasterized_grass_wet <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized_grass_wet.tif")
+
+
+# Resampling Jung to the same resolution of MapBiomas
+
+jung_br_30m <- terra::resample(jung_br, mb_1985_cropBR, method = "near") # re-sampling by the nearest pixel
 
 
 
