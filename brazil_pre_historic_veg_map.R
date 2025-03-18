@@ -14,15 +14,16 @@ rm(list = ls())
 
 # Loading layers ---------------------------------------------------------------
 
-br <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_merged.shp")
-mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/brazil_1985.tif")
-IBGE <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/Vegetacao_5000mil/Vegetacao_5000.shp")
-jung <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/iucn_habitatclassification_composite_1km_ver001/iucn_habitatclassification_composite_1km_ver001/iucn_habitatclassification_composite_1km_lvl2_ver001.tif")
+br <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_merged.shp") # Excluded a few islands to reduce extension
+mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/brazil_1985.tif") # using MapBiomas collection 09
+IBGE <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/Vegetacao_5000mil/Vegetacao_5000.shp") # Downloaded from ibge.gov.br
+jung <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/iucn_habitatclassification_composite_1km_ver001/iucn_habitatclassification_composite_1km_ver001/iucn_habitatclassification_composite_1km_lvl2_ver001.tif") # Jung et al. https://zenodo.org/records/4038749
 
 
-# Re projecting IBGE -----------------------------------------------------------
+# Re projecting IBGE to WGS84 (same as MapBiomas) ------------------------------
 
 br_wgs84 <- terra::project(br, "EPSG:4326")
+
 
 #terra::writeVector(br_wgs84, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_wgs84.shp")
 
@@ -39,7 +40,7 @@ jung_br <- mask(crop(jung, br_wgs84), br_wgs84)
 
 # Rasterizing IBGE -------------------------------------------------------------
 
-# Cleaning directory -----------------------------------------------------------
+# Cleaning directory 
 
 rm(list = ls())
 
@@ -55,6 +56,7 @@ IBGE_wgs84 <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_W
 br <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_wgs84.shp")
 
 
+# Reclassifying IBGE land cover types ------------------------------------------
 values(IBGE_wgs84) <- values(IBGE_wgs84) %>% 
   mutate(DSC_VEG_PR = case_when(
     DSC_VEG_PR == "Estepe" ~ "grasslands",
