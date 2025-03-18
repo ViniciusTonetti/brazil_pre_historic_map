@@ -1,4 +1,4 @@
-# Builfding a prehistoric vegetation map for Brazil
+# Brazil's historical vegetation map
 # Vinicius Tonetti - vrtonetti@gmail.com
 
 # Loading packages
@@ -20,7 +20,7 @@ IBGE <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/Vegetacao_50
 jung <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/iucn_habitatclassification_composite_1km_ver001/iucn_habitatclassification_composite_1km_ver001/iucn_habitatclassification_composite_1km_lvl2_ver001.tif") # Jung et al. https://zenodo.org/records/4038749
 
 
-# Re projecting IBGE to WGS84 (same as MapBiomas) ------------------------------
+# Re-projecting IBGE to WGS84 (same as MapBiomas) ------------------------------
 
 br_wgs84 <- terra::project(br, "EPSG:4326")
 
