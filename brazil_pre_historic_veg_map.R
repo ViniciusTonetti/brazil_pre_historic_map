@@ -16,7 +16,7 @@ rm(list = ls())
 
 br <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_merged.shp") # Excluded a few islands to reduce extension
 
-mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol11") # using MapBiomas collection 11
+mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol11/brazil_coverage-col11_1985.tif") # using MapBiomas collection 11
 
 IBGE <- vect("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/Vegetacao_5000mil/Vegetacao_5000.shp") # Downloaded from ibge.gov.br
 
