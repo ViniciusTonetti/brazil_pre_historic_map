@@ -234,8 +234,8 @@ IBGE_rasterized_grass_wet <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_
 
 jung_br_30m <- terra::resample(jung_br, mb_1985_cropBR, method = "near") # re-sampling by the nearest pixel
 
-#terra::writeRaster(jung_br_30m, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/jung_br_30m.tif",
-#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+terra::writeRaster(jung_br_30m, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/jung_br_30m.tif",
+            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
 
 
 # Adding Jung values in IBGE
@@ -253,8 +253,8 @@ IBGE_rasterized_grass_wet <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_
 
 historic_BR <- terra::ifel(IBGE_rasterized_grass_wet == 999, jung_br30m, IBGE_rasterized_grass_wet)
 
-#terra::writeRaster(historic_BR, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/historic_BR.tif",
-#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+terra::writeRaster(historic_BR, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/historic_BR.tif",
+            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
 
 
 # Reclassifying pixel values as Jung has different categories for each land cover type
