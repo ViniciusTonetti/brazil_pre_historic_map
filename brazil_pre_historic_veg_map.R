@@ -31,13 +31,16 @@ br_wgs84 <- terra::project(br, "EPSG:4326")
 #terra::writeVector(br_wgs84, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/br_limite/br_wgs84.shp")
 
 mb_1985_cropBR <- mask(crop(mb_1985, br_wgs84), br_wgs84)
+plot(mb_1985_cropBR)
 
-#writeRaster(mb_1985_cropBR, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
+#writeRaster(mb_1985_cropBR, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol11/mb_1985_crop_BR.tif")
 
 
 # Cropping Jung map to Brazil --------------------------------------------------
 
 jung_br <- mask(crop(jung, br_wgs84), br_wgs84)
+plot(jung_br)
+
 #writeRaster(jung_br, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/jung_br.tif")
 
 
@@ -177,7 +180,7 @@ values(IBGE_wgs84) <- values(IBGE_wgs84) %>%
 
 
 # Loading MapBiomas 1985 to use the same resolution
-mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
+mb_1985 <- rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol11/mb_1985_crop_BR.tif")
 
 
 # rasterizing IBGE
