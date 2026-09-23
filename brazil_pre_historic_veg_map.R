@@ -226,7 +226,7 @@ rm(list = ls())
 # Loading layers
 
 jung_br <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/jung_br.tif")
-mb_1985_cropBR <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol09/mb_1985_crop_BR.tif")
+mb_1985_cropBR <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol11/mb_1985_crop_BR.tif")
 IBGE_rasterized_grass_wet <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized_grass_wet.tif")
 
 
