@@ -208,7 +208,7 @@ IBGE_rasterized_grass <- terra::ifel(mb_1985_cropBR == 12, 400, IBGE_raster)
 
 # and considering all wetlands in MapBiomas 1985 (code 11) as wetlands in IBGE (IUCN code 500)
 
-IBGE_rasterized_grass_wet <- terra::ifel(mb_1985_cropBR == 11, 500, IBGE_rasterized_grass)
+IBGE_rasterized_grass_wet <- terra::ifel(mb_1985_cropBR %in% c(11, ), 500, IBGE_rasterized_grass)
 
 
 terra::writeRaster(IBGE_rasterized_grass_wet, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/IBGE/IBGE_rasterized_grass_wet.tif",
@@ -293,7 +293,29 @@ reclass_matrix <- matrix(c(0, 100,
 
 historic_BR_final_values <- terra::classify(historic_BR, reclass_matrix)
 
-#terra::writeRaster(historic_BR_final_values, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/historic_BR_final_values.tif",
-#            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+terra::writeRaster(historic_BR_final_values, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/historic_BR_final_values.tif",            gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+
+
+
+# Forest and wetlands - considering pixels that are forest and wetlands in MapBiomas 1985 as forest and wetlands in PNV
+
+# Cleaning directory 
+
+rm(list = ls())
+
+# Loading layers
+
+historic_BR <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/jung/historic_BR_final_values.tif")
+mb_1985_col11 <- terra::rast("E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol11/mb_1985_crop_BR.tif")
+
+br_forest_grasslands_mb1985 <- terra::ifel(mb_1985_col11 == 3, 100,
+                               terra::ifel(mb_1985_col11 %in% c(11, 33), 500, historic_BR))
+
+
+terra::writeRaster(br_forest_grasslands_mb1985, "E:/_PESSOAL/ViniciusT/prehistoric_veg_map_brazil/MapBiomascol11/pnv_br_ibge_mb1985_col11.tif",
+                   gdal=c("COMPRESS=DEFLATE", "TFW=YES"), overwrite = T)
+
+
+
 
 
